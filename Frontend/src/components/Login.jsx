@@ -16,7 +16,7 @@ function Login() {
       password: data.password,
     };
     await axios
-      .post("/user/login", userInfo)
+      .post(`${window.location.origin}/user/login`, userInfo)
       .then((res) => {
         console.log(res.data);
         if (res.data) {
