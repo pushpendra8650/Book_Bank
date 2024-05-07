@@ -12,25 +12,33 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-dotenv.config();
+dotenv.config({
+    path: './.env'
+});
 
 const PORT = process.env.PORT || 4000;
-const URI = process.env.MongoDBURI;
+const connectDB = async () => {
+    try {
+        const db = await mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            dbName: "bookbank" // Specify the database name here
+        });
+        console.log(`DB Connected :) ${db.connection.host}`);
+    } catch (error) {
+        console.error("DB Connection Error :", error);
+        throw error;
+    }
+};
 
 // connect to mongoDB
-try {
-    mongoose.connect(URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-    console.log("Connected to mongoDB");
-} catch (error) {
-    console.log("Error: ", error);
-}
+connectDB()
 
 // defining routes
 app.use("/book", bookRoute);
 app.use("/user", userRoute);
+
+
 
 
 // depeloyment
@@ -45,3 +53,11 @@ if(process.env.NODE_ENV === "production"){
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
+
+// app.get("/",(req,res)=>{
+//     app.use(express.static(path.resolve(dirpath,"Frontend","dist")));
+//     res.sendFile(path.resolve(dirpath,"Frontend","dist","index.html"));
+// });
+// app.listen(PORT, () => {
+//     console.log(`Server is listening on port ${PORT}`);
+// });
