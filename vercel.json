@@ -1,8 +1,14 @@
 {
-    "rewites":[
+    "builds":[
         {
-            "source":"/(.*)",
-            "destination":"/index.html"
+            "src":"./index.html",
+            "use":"@vercel/node"
+        }
+    ],
+    "routes":[
+        {
+            "src":"/.*",
+            "dest":"index.html"
         }
     ]
 }
